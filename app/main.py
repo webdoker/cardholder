@@ -26,8 +26,8 @@ logging.basicConfig(
 )
 
 MAX_CARDS = 10
-MAX_TOTAL_SIZE = 20 * 1024 * 1024  # 20 МБ
-ITEMS_PER_PAGE = 6  # Кнопок на страницу пагинации
+MAX_TOTAL_SIZE = 20 * 1024 * 1024  # 20 MB
+ITEMS_PER_PAGE = 6  # store buttons per pagination page
 
 # /start
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -43,7 +43,7 @@ async def addcard(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("Введите название магазина:")
     context.user_data["mode"] = "add_store"
 
-# /mycards — запускает пагинацию магазинов
+# /mycards — starts store pagination
 async def mycards(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     try:
@@ -53,7 +53,7 @@ async def mycards(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if not cards:
                 await update.message.reply_text("У тебя пока нет сохранённых карт.")
                 return
-            # Сохраняем карты и уникальные магазины в user_data
+            # Save cards and unique store names in user_data
             context.user_data["cards"] = cards
             stores = sorted(list({c.store for c in cards}))
             context.user_data["stores"] = stores
@@ -63,7 +63,7 @@ async def mycards(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logging.error(e)
         await update.message.reply_text("Ошибка при получении карт.")
 
-# Функция отправки страницы с кнопками магазинов
+# Send a paginated page of store buttons
 async def send_store_page(update_or_query, context, page: int):
     stores = context.user_data.get("stores", [])
     total_pages = (len(stores) - 1) // ITEMS_PER_PAGE + 1
@@ -90,13 +90,13 @@ async def send_store_page(update_or_query, context, page: int):
     reply_markup = InlineKeyboardMarkup(keyboard)
 
     if isinstance(update_or_query, Update):
-        # При команде /mycards
+        # Triggered by /mycards command
         await update_or_query.message.reply_text("Выбери магазин:", reply_markup=reply_markup)
     else:
-        # При нажатии на кнопки (CallbackQuery)
+        # Triggered by inline keyboard callback
         await update_or_query.edit_message_reply_markup(reply_markup=reply_markup)
 
-# Обработчик нажатий на кнопки inline-клавиатуры
+# Inline keyboard callback handler
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
     await query.answer()
@@ -119,9 +119,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
             bio = BytesIO(decrypted)
             bio.name = f"{store}.jpg"
             await query.message.reply_photo(photo=bio)
-        # После показа карты можно сбросить режим или нет
+        # Reset mode after showing the card
         context.user_data["mode"] = None
-        # Можно удалить клавиатуру, чтобы не путать пользователя
+        # Remove keyboard to avoid confusing the user
         await query.edit_message_reply_markup(reply_markup=None)
 
 # /deletecard
@@ -143,7 +143,7 @@ async def deletecard(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logging.error(e)
         await update.message.reply_text("Ошибка при получении карт.")
 
-# Обработка текста
+# Text message handler
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     mode = context.user_data.get("mode")
 
@@ -183,7 +183,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.user_data["mode"] = None
         return
 
-# Обработка фото (с ограничениями)
+# Photo handler (with storage limits)
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if context.user_data.get("mode") != "add_photo":
         return
