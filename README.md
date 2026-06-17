@@ -1,12 +1,19 @@
 # CartholderBot
 
-**Self-hosted Telegram bot for storing discount and loyalty cards with encrypted photo storage.**
+<p align="center">
+  <b>Self-hosted Telegram bot for storing discount and loyalty cards</b><br>
+  <b>Telegram-бот для хранения дисконтных карт с шифрованием фотографий</b>
+</p>
 
-**Self-hosted Telegram-бот для хранения дисконтных и бонусных карт с шифрованием фотографий.**
+<p align="center">
+  <b>📖 Documentation / Документация</b> — click a section below to expand
+</p>
 
----
+<!-- tabs: GitHub does not support native tabs; <details> gives a similar UX -->
 
-## English
+<details open>
+<summary><h2 style="display:inline">🇬🇧 English</h2></summary>
+<br>
 
 ### What is CartholderBot?
 
@@ -101,7 +108,6 @@ User interaction state is managed via `context.user_data["mode"]` (e.g. `add_sto
 
 1. **Create a Telegram bot** via [@BotFather](https://t.me/BotFather):
    - Send `/newbot`, follow the prompts, copy the `BOT_TOKEN`
-   - If you are rotating a compromised token, use `/revoke` on the old bot first
 
 2. **Clone the repository:**
    ```bash
@@ -144,15 +150,16 @@ User interaction state is managed via `context.user_data["mode"]` (e.g. `add_sto
 - Run behind a firewall; only the Telegram API needs outbound internet access
 - Change default PostgreSQL credentials in production
 - Back up `FERNET_KEY` — without it, stored cards are unrecoverable
-- Revoke and reissue `BOT_TOKEN` if it was ever exposed in logs or git history
 
 ### License
 
 MIT — see [LICENSE](LICENSE).
 
----
+</details>
 
-## Русский
+<details>
+<summary><h2 style="display:inline">🇷🇺 Русский</h2></summary>
+<br>
 
 ### Что такое CartholderBot?
 
@@ -220,7 +227,7 @@ CartholderBot — это open-source Telegram-бот с развёртывани
 
 ### Архитектура
 
-| Компонент | Назначение |
+| Component | Назначение |
 |-----------|------------|
 | `app/main.py` | Обработчики Telegram, машина состояний, бизнес-логика |
 | `app/crypto.py` | Шифрование / расшифровка Fernet |
@@ -247,7 +254,6 @@ CartholderBot — это open-source Telegram-бот с развёртывани
 
 1. **Создайте Telegram-бота** через [@BotFather](https://t.me/BotFather):
    - Отправьте `/newbot`, следуйте инструкциям, скопируйте `BOT_TOKEN`
-   - Если перевыпускаете скомпрометированный токен — сначала выполните `/revoke` у старого бота
 
 2. **Клонируйте репозиторий:**
    ```bash
@@ -290,8 +296,9 @@ CartholderBot — это open-source Telegram-бот с развёртывани
 - Запускайте за файрволом; боту нужен только исходящий доступ к Telegram API
 - В продакшене смените стандартные учётные данные PostgreSQL
 - Делайте резервную копию `FERNET_KEY` — без него сохранённые карты не восстановить
-- Перевыпустите `BOT_TOKEN` через BotFather, если он попадал в логи или историю git
 
 ### Лицензия
 
 MIT — см. [LICENSE](LICENSE).
+
+</details>
